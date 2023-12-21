@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
-	auxlib2 "github.com/vela-ssoc/vela-kit/auxlib"
+	strutil "github.com/vela-ssoc/vela-kit/auxlib"
 	"github.com/vela-ssoc/vela-kit/lua"
 	"io"
 	"reflect"
@@ -34,7 +34,7 @@ type copyGo struct {
 //rock.copy(src , dst , tag)
 
 func key(s1, s2, tag string) string {
-	if e := auxlib2.Name(tag); e == nil {
+	if e := strutil.Name(tag); e == nil {
 		return tag
 	}
 
@@ -80,7 +80,7 @@ func checkDst(L *lua.LState, idx int) lua.Writer {
 
 func checkTag(L *lua.LState, idx int) string {
 	if tv := L.Get(idx); tv.Type() == lua.LTString {
-		return auxlib2.CheckProcName(tv, L)
+		return strutil.CheckProcName(tv, L)
 	}
 
 	return ""
@@ -110,7 +110,7 @@ func (c *copyGo) Type() string {
 
 func (c *copyGo) handle() {
 
-	_, err := auxlib2.Copy(c.ctx, c.dst, c.src)
+	_, err := strutil.Copy(c.ctx, c.dst, c.src)
 	if err != nil {
 		xEnv.Errorf("%s %s flow close error %v", c.vm, c.Name(), err)
 	}

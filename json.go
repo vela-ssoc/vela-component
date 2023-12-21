@@ -1,15 +1,15 @@
 package component
 
 import (
-	"github.com/vela-ssoc/vela-kit/vela"
 	"github.com/vela-ssoc/vela-kit/kind"
 	"github.com/vela-ssoc/vela-kit/lua"
+	"github.com/vela-ssoc/vela-kit/vela"
 )
 
 func newLuaJsonEncode(L *lua.LState) int {
 	lv := L.CheckAny(1)
 
-	data, err := kind.Marshal(lv)
+	data, err := kind.MarshalJson(lv)
 	if err != nil {
 		L.Push(lua.LNil)
 		L.Pushf("%v", err)
@@ -43,6 +43,16 @@ func newLuaJsonKind(L *lua.LState) int {
 	local v = vela.json("{name:123 , pass:123}")
 	print(v.name)
 	print(v.name)
+
+	local kind = vela.json.kind()
+	kind.tab("")
+	kind.kv("name" , "vela")
+	kind.kv("pass" , "123456")
+	kind.kv("pass" , "123456")
+	kind.kv("pass" , "123456")
+	kind.kv("pass" , "123456")
+	kind.kv("pass" , "123456")
+	kind.end("}")
 */
 
 func newLuaJsonIndex(env vela.Environment) {

@@ -21,6 +21,12 @@ func WithEnv(env vela.Environment) {
 	//json
 	newLuaJsonIndex(env)
 
+	//to
+	newLuaToIndex(env)
+
+	//slice
+	newLuaSliceIndex(env)
+
 	//args
 	env.Set("args", newLuaArgsIndex())
 

@@ -1,21 +1,9 @@
 package component
 
 import (
-	"github.com/vela-ssoc/vela-kit/vela"
 	"github.com/vela-ssoc/vela-kit/lua"
+	"github.com/vela-ssoc/vela-kit/vela"
 )
-
-func sliceL(co *lua.LState, s lua.Slice, cp lua.P) {
-	n := s.Len()
-	if n == 0 {
-		return
-	}
-	for i := 0; i < n; i++ {
-		if e := co.CallByParam(cp, s[i], lua.LInt(i)); e != nil {
-			xEnv.Errorf("for call function fail %v", e)
-		}
-	}
-}
 
 func mapL(co *lua.LState, m *lua.Map, cp lua.P) {
 	keys := m.Keys()

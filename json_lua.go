@@ -46,6 +46,42 @@ func (enc *JsonKind) metaKV(L *lua.LState) int {
 	return 0
 }
 
+func (enc *JsonKind) metaVL(L *lua.LState) int {
+	val := L.CheckAny(1)
+	switch val.Type() {
+	case lua.LTBool:
+		enc.inline.V(bool(val.(lua.LBool)))
+	case lua.LTString:
+		enc.inline.V(val.String())
+	case lua.LTNumber:
+		enc.inline.V(float64(val.(lua.LNumber)))
+	case lua.LTInt:
+		enc.inline.V(int(val.(lua.LInt)))
+	case lua.LTAnyData:
+		enc.inline.V(val.(*lua.AnyData).Data)
+	case lua.LTUserData:
+		enc.inline.V(val.(*lua.LUserData).Value)
+	case lua.LTVelaData:
+		enc.inline.V(val.(*lua.VelaData).Data)
+	default:
+		enc.inline.V(val.String())
+	}
+	return 0
+}
+
+func (enc *JsonKind) metaRawL(L *lua.LState) int {
+	k := L.CheckString(1)
+	chunk := L.CheckString(2)
+	enc.inline.Raw(k, lua.S2B(chunk))
+	return 0
+}
+
+func (enc *JsonKind) noKeyRawL(L *lua.LState) int {
+	chunk := L.CheckString(1)
+	enc.inline.WriteString(chunk)
+	return 0
+}
+
 func (enc *JsonKind) metaInt64(L *lua.LState) int {
 	key := L.CheckString(1)
 	val := L.CheckNumber(2)
@@ -85,6 +121,12 @@ func (enc *JsonKind) metaStr(L *lua.LState) int {
 
 func (enc *JsonKind) Index(L *lua.LState, key string) lua.LValue {
 	switch key {
+	case "v":
+		return L.NewFunction(enc.metaVL)
+	case "raw":
+		return L.NewFunction(enc.metaRawL)
+	case "raw2":
+		return L.NewFunction(enc.noKeyRawL)
 	case "kv":
 		return L.NewFunction(enc.metaKV)
 	case "int64":
